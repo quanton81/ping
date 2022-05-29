@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ping-deployment
+  labels:
+    app: ping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ping
+  template:
+    metadata:
+      labels:
+        app: ping
+    spec:
+      containers:
+        - name: ping
+          image: duoda/ping
+          resources:
+            limits:
+              memory: 2024Mi
+              cpu: "2"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+          ports:
+            - containerPort: 5200
+          imagePullPolicy: IfNotPresent     
