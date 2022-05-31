@@ -145,3 +145,16 @@ kubectl describe pod mongodb-deployment-xxxxxx
 kubectl describe service mongodb-service
 kubectl logs mongo-express-xxxxxx
 ```
+
+## Install nuget package
+
+`dotnet add package prometheus-net.AspNetCore`
+
+## Install Helm Prometheus Charts
+
+```
+sudo snap install helm --classic
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
+```
