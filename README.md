@@ -144,6 +144,16 @@ kubectl get all | grep mongodb
 kubectl describe pod mongodb-deployment-xxxxxx
 kubectl describe service mongodb-service
 kubectl logs mongo-express-xxxxxx
+kubectl get service
+kubectl get pods
+# expose grafana
+kubectl get deployment
+kubectl port-forward deployment/kube-prometheus-stack-grafana 3000
+# expose prometheus
+kubectl get services
+kubectl port-forward service/kube-prometheus-stack-prometheus 9090
+# list of service monitor that are found on targets under prometheus
+kubectl get servicemonitor
 ```
 
 ## Install nuget package
