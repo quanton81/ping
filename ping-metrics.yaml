@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ping-metrics
+  labels:
+    app: ping
+spec:
+  ports:
+  - name: metrics
+    port: 5200
+    targetPort: 5200
+    protocol: TCP
+  selector:
+    app: ping
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ping-metrics-servicemonitor
+  namespace: default
+  labels:
+    app: ping
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: ping
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
