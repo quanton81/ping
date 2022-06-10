@@ -1,5 +1,7 @@
 # Kubernetes
 
+A simple .Net core application with minikube and config files for a deployment, service and service monitor useful for prometheus and grafana
+
 ## Install .Net SDK, Runtime
 
 [Install .Net](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu "Install .Net")
