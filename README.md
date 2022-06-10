@@ -1,13 +1,25 @@
 # Kubernetes
 
-## .Net SDK, Runtime
+## Install .Net SDK, Runtime
 
 [Install .Net](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu "Install .Net")
 
 
-## Docker
+## Install Docker
 
 [Install docker](https://docs.docker.com/engine/install/ubuntu/ "Install docker")
+
+## Install Minikube
+
+[Install minikube](https://minikube.sigs.k8s.io/docs/start/ "Install minikube")
+
+
+```
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+
+## Steps to executo to puth things up
 
 ### Execute docker with your user
 
@@ -25,15 +37,6 @@ docker build -f ping/Dockerfile -t duoda/ping .
 docker push duoda/ping
 ```
 
-## Minikube
-
-[Install minikube](https://minikube.sigs.k8s.io/docs/start/ "Install minikube")
-
-```
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-```
-
 ### Start minikube with docker driver
 
 `minikube start --driver=docker`
@@ -42,33 +45,43 @@ sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
 `alias kubectl="minikube kubectl --"`
 
-### Minikube useful commands
+### Install nuget package
 
-```
-kubectl get nodes
-minikube status
-kubectl version
-```
+`dotnet add package prometheus-net.AspNetCore`
 
 ### Delete cluster and restart in debug mode
 
 ```
 minikube delete
-minikube start --vm-driver=hyperkit --v=7 --alsologtostderr
+minikube start --vm-driver=docker
 minikube status
 ```
 
-### Kubectl commands
+### Install Helm Prometheus Charts
 
 ```
-kubectl get nodes
-kubectl get pod
-kubectl get services
-kubectl create deployment nginx-depl --image=nginx
-kubectl get deployment
-kubectl get replicaset
-kubectl edit deployment nginx-depl
+sudo snap install helm --classic
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
 ```
+
+### Apply to Minikube yaml files
+
+```
+kubectl apply -f ping-deployment.yaml
+kubectl get deployment // should show ping deployment
+kubectl apply -f ping-service.yaml
+kubectl get service // should show ping service
+minikube service --url ping-service // returns ip with port to ping service and test
+kubectl apply -f ping-metrics.yaml
+kubectl get servicemonitor // should show ping service monitor
+kubectl port-forward service/kube-prometheus-stack-prometheus 9090 // forward prometheus
+kubectl port-forward deployment/kube-prometheus-stack-grafana 3000 // forward grafana
+```
+If everything is ok you should see ping-service on prometheus and grafana
+
+## Useful commands
 
 ### Debugging
 
@@ -118,14 +131,6 @@ minikube service --url mongo-express-service
 
 The kubectl top command returns current CPU and memory usage for a cluster’s pods or nodes, or for a particular pod or node if specified.
 
-### Kubectl apply commands in order
-
-```    
-kubectl apply -f mongo-secret.yaml
-kubectl apply -f mongo.yaml
-kubectl apply -f mongo-configmap.yaml 
-kubectl apply -f mongo-express.yaml
-```
 
 ### Kubectl get commands
 
@@ -154,17 +159,4 @@ kubectl get services
 kubectl port-forward service/kube-prometheus-stack-prometheus 9090
 # list of service monitor that are found on targets under prometheus
 kubectl get servicemonitor
-```
-
-## Install nuget package
-
-`dotnet add package prometheus-net.AspNetCore`
-
-## Install Helm Prometheus Charts
-
-```
-sudo snap install helm --classic
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
 ```
