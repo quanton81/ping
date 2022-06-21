@@ -6,6 +6,10 @@ A simple .Net core application with minikube and config files for a deployment, 
 
 [Install .Net](https://docs.microsoft.com/en-us/dotnet/core/install/linux-ubuntu "Install .Net")
 
+## Install Locust
+
+[Install Locust](https://docs.locust.io/en/stable/installation.html "Install Locust")
+
 
 ## Install Docker
 
